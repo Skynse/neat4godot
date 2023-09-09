@@ -19,8 +19,6 @@ This addon provides the tools and framework to integrate NEAT-based AI into your
 
 - **Real-Time Learning:** Watch your AI characters adapt and improve in real time as they interact with your game world.
 
-- **Documentation and Examples:** Detailed documentation and example projects help you get started with Neat4Godot quickly.
-
 ## Usage
 
 To use Neat4Godot in your Godot project, follow these simple steps:
