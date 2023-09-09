@@ -2,6 +2,9 @@
 
 Neat4Godot is an implementation of the NEAT (NeuroEvolution of Augmenting Topologies) algorithm for the Godot game engine. NEAT is a powerful algorithm for evolving artificial neural networks, often used in reinforcement learning and evolutionary robotics scenarios.
 
+![basic NN](assets/screenshot.png)
+example image from a game I'm working on
+
 This addon provides the tools and framework to integrate NEAT-based AI into your Godot projects, allowing you to create adaptive and evolving game characters, agents, and more. With Neat4Godot, you can harness the power of genetic algorithms to train AI entities within your games.
 
 ## Features
