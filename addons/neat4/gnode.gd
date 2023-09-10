@@ -25,7 +25,13 @@ func calculate() -> void:
 	output = activation_function(s)
 
 func activation_function(_x: float):
+	return tanh_activation(_x)
+	
+func sigmoid(_x):
 	return 1 / (1 + exp(_x))
+	
+func tanh_activation(_x):
+	return tanh(_x)
 
 func compareTo(o: GNode) -> int:
 	return -1 if x > o.x else 1 if x < o.x else 0
