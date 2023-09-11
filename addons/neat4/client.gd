@@ -20,8 +20,6 @@ func distance(other: Client):
 func mutate():
 	genome.mutate()
 
-func copy() -> Client:
-	return self
 
 func set_genome(_genome) -> void:
 	genome = _genome

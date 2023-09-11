@@ -93,7 +93,7 @@ func reproduce():
 
 func mutate():
 	for c in clients.data:
-		c.mutate()
+		c.call_deferred("mutate")
 
 func gen_species():
 	for s in species.data:
@@ -131,7 +131,7 @@ func empty_genome() -> Genome:
 
 # Instance method to create a connection gene given two node genes
 # Static method to create a connection gene from an existing one
-func get_connection_from_existing(con: ConnectionGene) -> ConnectionGene:
+static func get_connection_from_existing(con: ConnectionGene) -> ConnectionGene:
 	var c: ConnectionGene = ConnectionGene.new(con.from, con.to)
 	c.innovation_number = con.innovation_number
 	c.weight = con.weight

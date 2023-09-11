@@ -111,16 +111,39 @@ func distance(g2: Genome) -> float:
 	
 	
 func mutate() -> void:
-	if self.neat.get_probability_mutate_link() > randf():
+	if self.neat.get_probability_mutate_link() < randf():
 		mutate_link()
-	if self.neat.get_probability_mutate_node()  > randf():
+	if self.neat.get_probability_mutate_node()  < randf():
 		mutate_node()
-	if self.neat.get_probability_mutate_weight_shift() > randf():
+	if self.neat.get_probability_mutate_weight_shift() < randf():
 		mutate_weight_shift()
-	if self.neat.get_probability_mutate_weight_random() > randf():
+	if self.neat.get_probability_mutate_weight_random() < randf():
 		mutate_weight_random()
-	if self.neat.get_probability_mutate_toggle_link() > randf():
+	if self.neat.get_probability_mutate_toggle_link() < randf():
 		mutate_link_toggle()
+
+func add_custom_connection(from_index: int, to_index: int, weight: float = 1.0):
+	var genome = self
+
+	# Create nodes with custom indices
+	var from_node = NodeGene.new(from_index)
+	var to_node = NodeGene.new(to_index)
+
+	# Calculate the x-coordinates based on your criteria
+	from_node.x = 0.1
+	to_node.x = 0.9
+
+	# Calculate the y-coordinates based on the total number of nodes
+	var total_nodes = genome.neat.input_size + genome.neat.output_size
+	from_node.y = (from_index + 1) / (total_nodes + 1)
+	to_node.y = (to_index + 1) / (total_nodes + 1)
+
+	# Create a connection between the custom nodes and set its weight
+	var connection: ConnectionGene = ConnectionGene.new(from_node, to_node)
+	connection.weight = weight
+
+	# Add the custom connection to the genome
+	genome.connections.add(connection)
 
 		
 func mutate_node():
@@ -141,7 +164,8 @@ func mutate_node():
 	#else:
 	#	middle = neat._get_node(replace_index)
 	#neat.set_replace_index(from, to, middle.innovation_number)
-	middle = neat._get_node()
+	#middle = neat._get_node() # Might give own function in the case of getting best agent type games/sims
+	middle = NodeGene.new(nodes.size() + 1)
 	middle.x =  (from.x  + to.x )/ 2
 	middle.y =  (from.y  + to.y )/ 2 + randf() * 0.1 - 0.05
 	
@@ -170,10 +194,10 @@ func mutate_link() -> void:
 		
 		
 		if a== null or b == null: continue
-		if a.x == b.x:
+		if a.x == b.x: # same node 
 			continue
 		var con: ConnectionGene
-		if a.x < b.x:
+		if a.x < b.x: 
 			con = ConnectionGene.new(a, b)
 
 		else:
@@ -182,10 +206,24 @@ func mutate_link() -> void:
 		if connections.contains(con):
 			continue
 			
-		con = neat.get_connection(con.from, con.to)
+		#con = neat.get_connection(con.from, con.to)
+		con = get_connection(con.from, con.to)
 		con.weight = (randf() *2 -1) *  neat.WEIGHT_RANDOM_STRENGTH
 		connections.add_sorted(con)
 		return
+
+func get_connection(node1: NodeGene, node2: NodeGene) -> ConnectionGene:
+	var connection_gene: ConnectionGene = ConnectionGene.new(node1, node2)
+
+	if connections.set.keys().has(connection_gene):
+		connection_gene.innovation_number = connections.set[connection_gene].innovation_number
+	else:
+		connection_gene.innovation_number = connections.size() + 1
+		connections.set[connection_gene] = connection_gene
+		
+
+	return connection_gene
+
 
 func mutate_weight_shift() -> void:
 	var con: ConnectionGene = connections.random_element()
@@ -202,4 +240,17 @@ func mutate_link_toggle() -> void:
 	if (con != null):
 		con.enabled = !con.enabled
 	
-
+func clone() -> Genome:
+	var c_connections = self.connections.data.duplicate()
+	var c_connections_set = self.connections.set.duplicate()
+	
+	var n_nodes = self.nodes.data.duplicate()
+	var n_nodes_set = self.nodes.set.duplicate()
+	
+	var _g: Genome = Genome.new(self.neat)
+	_g.connections.data = c_connections
+	_g.connections.set = c_connections_set
+	_g.nodes.data = n_nodes
+	_g.nodes.set = n_nodes_set
+	
+	return _g

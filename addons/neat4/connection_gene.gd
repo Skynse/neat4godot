@@ -1,4 +1,4 @@
-class_name ConnectionGene
+class_name ConnectionGene #LinkGene
 extends Gene
 
 var from: NodeGene
@@ -6,8 +6,6 @@ var to: NodeGene
 
 var weight: float
 var enabled: bool = true
-
-var replace_index: int
 
 func equals(o: Object):
 	if !o.is_class("ConnectionGene"): 
@@ -21,9 +19,3 @@ func _init(_from: NodeGene, _to: NodeGene):
 
 func hashcode() -> int:
 	return from.innovation_number  * Neat.MAX_NODES * to.innovation_number
-	
-func get_replace_index():
-	return replace_index
-	
-func set_replace_index(r):
-	replace_index = r
