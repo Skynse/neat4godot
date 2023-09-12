@@ -9,12 +9,12 @@ func _init(g: Genome):
 	var nodes: RandomHashSet = g.nodes #NodeGene
 	var cons: RandomHashSet = g.connections #ConnectionGene
 	
-	
 	var nodeHashMap: Dictionary = {} #int, Node
 	
 	for n in nodes.data:
 		#assert(n.is_class("NodeGene"))
 		var node: GNode = GNode.new(n.x)
+		node.activation_func = n.activation_func
 		nodeHashMap[n.innovation_number] = node
 		
 		if (n.x <= 0.1):
@@ -25,6 +25,16 @@ func _init(g: Genome):
 			hidden_nodes.push_back(node)
 			
 	hidden_nodes.sort_custom(
+		func compareTo(o1: GNode, o2: GNode):
+			return o1.compareTo(o2)
+	)
+	
+	input_nodes.sort_custom(
+		func compareTo(o1: GNode, o2: GNode):
+			return o1.compareTo(o2)
+	)
+	
+	output_nodes.sort_custom(
 		func compareTo(o1: GNode, o2: GNode):
 			return o1.compareTo(o2)
 	)
@@ -39,13 +49,14 @@ func _init(g: Genome):
 		con.weight = c.weight
 		con.enabled = c.enabled
 		
-		node_to.connections.push_back(con)
+		node_to.connections.append(con)
 		
 
 func calculate(input: Array[float]) :
 	assert(input.size() == input_nodes.size())
 	for i in range(input_nodes.size()):
 		input_nodes[i].setOutput(input[i])
+		
 	for n in hidden_nodes:
 		n.calculate()
 		

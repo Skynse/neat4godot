@@ -13,11 +13,11 @@ var input_size = 0
 var output_size = 0
 
 
-@export var PROBABILITY_MUTATE_LINK: float  = 0.6
+@export var PROBABILITY_MUTATE_LINK: float  = 0.4
 @export var PROBABILITY_MUTATE_NODE:float = 0.4
 @export var PROBABILITY_MUTATE_WEIGHT_SHIFT:float = 0.4
 @export var PROBABILITY_MUTATE_WEIGHT_RANDOM:float  = 0.4
-@export var PROBABILITY_MUTATE_TOGGLE_LINK:float   = 0.2
+@export var PROBABILITY_MUTATE_TOGGLE_LINK:float   = 0.1
 @export var WEIGHT_SHIFT_STRENGTH: float = 0.3
 @export var WEIGHT_RANDOM_STRENGTH: float = 1
 
@@ -93,7 +93,7 @@ func reproduce():
 
 func mutate():
 	for c in clients.data:
-		c.call_deferred("mutate")
+		c.mutate()
 
 func gen_species():
 	for s in species.data:
